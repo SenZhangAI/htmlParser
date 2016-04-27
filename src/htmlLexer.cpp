@@ -6,8 +6,6 @@ namespace htmlparser {
     shared_ptr<HtmlDocument> HtmlLexer::parse(const string_t& html) const {
         //test
         {
-            cout << "Parsing...\n\n" << endl;
-
             shared_ptr<HtmlDocument> document = make_shared<HtmlDocument>();
 
             shared_ptr<HtmlText> text = make_shared<HtmlText>("This is Text");
@@ -18,7 +16,11 @@ namespace htmlparser {
             element->addAttribute("attribute2", "value2");
 
             text = make_shared<HtmlText>("This is text in Element");
+            shared_ptr<HtmlElement> element2 = make_shared<HtmlElement>("This-is-Element-Tag2");
+            element2->addSon(text);
+
             element->addSon(text);
+            element->addSon(element2);
 
             shared_ptr<HtmlComment> comment = make_shared<HtmlComment>("This is Text");
             element->addSon(text);

@@ -21,6 +21,7 @@ namespace htmlparser {
 
     public:
         bool hasSon() const;
+        /** addSon注意不能有环, 即父对象直接或间接成为子对象的子对象*/
         void addSon(const Ptr& son);
         HtmlObject* setParent(HtmlObject* parent);
 

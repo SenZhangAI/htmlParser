@@ -58,23 +58,37 @@ namespace htmlparser {
     };
 
 ///////////////////////////////////////////////////////////////////////////////
+// Indenter
+    void Indenter::indentIncrease() {
+        _index++;
+        if(_index == _indentStack.size()) {
+            string_t temp = _indentStack[_index - 1] + _indentStyle;
+            _indentStack.push_back(temp);
+        }
+    }
+    void Indenter::indentDecrease() {
+        _index--;
+        if(_index < 0)
+           _index = 0;
+    }
+///////////////////////////////////////////////////////////////////////////////
 // HtmlTextRanderer
 
     void HtmlTextRanderer::rander(const HtmlComment& comment) const {
-        buff += "<--" + comment.getComment();
-        buff += "-->\n";
+        _buff += _indenter.getIndent() + "<--" + comment.getComment();
+        _buff += "-->\n";
     }
 
     void HtmlTextRanderer::randerTagBegin(const HtmlElement& element) const {
-        buff += "<" + element.getTag();
+        _buff += _indenter.getIndent() + "<" + element.getTag();
 
         HtmlElement::Attributes attr = element.getAttributes();
 
         for (auto iter = attr.begin(); iter != attr.end(); ++iter) {
-            buff += " " + iter-> first + " = \"" + iter -> second + "\"";
+            _buff += " " + iter-> first + " = \"" + iter -> second + "\"";
         }
 
-        buff += ">\n";
+        _buff += ">\n";
     }
 
     void HtmlTextRanderer::rander(const HtmlEmptyElement& element) const {
@@ -88,16 +102,18 @@ namespace htmlparser {
         // 一方面可强制检查nullptr，另一方面可以复用
         // 这里是为了代码更为清晰
         if (element.hasSon()) {
+            _indenter.indentIncrease();
             for (shared_ptr<HtmlObject> s : * (element._sons)) {
                 s -> randerBy(*this);
             }
+            _indenter.indentDecrease();
         }
 
-        buff += "</" + element.getTag() + ">\n";
+        _buff += _indenter.getIndent() + "</" + element.getTag() + ">\n";
     }
 
     void HtmlTextRanderer::rander(const HtmlText& text) const {
-        buff += text.getText() + "\n";
+        _buff += _indenter.getIndent() + text.getText() + "\n";
     }
 
     void HtmlTextRanderer::rander(const HtmlDocument& document) const {
@@ -113,6 +129,6 @@ namespace htmlparser {
     }
 
     void HtmlTextRanderer::draw() const {
-        std::cout << buff << std::endl;
+        std::cout << _buff << std::endl;
     };
 }

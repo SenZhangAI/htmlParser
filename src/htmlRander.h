@@ -51,9 +51,33 @@ namespace htmlparser {
         virtual void draw() const override;
     };
 
+    class Indenter {
+    public:
+        typedef vector<string>  Vec;
+    private:
+        string_t _initIndent = "";
+        string_t _indentStyle = "    "; //默认四个空格
+        Vec      _indentStack;
+        size_t   _index = 0;
+    public:
+        Indenter() {
+            _indentStack.push_back(_initIndent);
+        }
+        Indenter(const string_t& style) : _initIndent(style) {
+            _indentStack.push_back(_initIndent); }
+        void setStyle(const string_t& style) { _indentStyle = style; }
+        string_t getIndent() const {
+            assert(_index >= 0);
+            return _indentStack[_index];
+        }
+        void indentIncrease();
+        void indentDecrease();
+    };
+
     class HtmlTextRanderer : public HtmlRanderer {
     private:
-        mutable string_t buff = "";
+        mutable string_t _buff = "";
+        mutable Indenter _indenter;
     public:
         virtual void rander(const HtmlComment&) const override;
         virtual void rander(const HtmlEmptyElement&) const override;
