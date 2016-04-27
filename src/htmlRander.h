@@ -55,7 +55,7 @@ namespace htmlparser {
     public:
         typedef vector<string>  Vec;
     private:
-        string_t _initIndent = T("");
+        string_t _initIndent = T("\n");
         string_t _indentStyle = T("    "); //默认四个空格
         Vec      _indentStack;
         size_t   _index = 0;
@@ -63,7 +63,7 @@ namespace htmlparser {
         Indenter() {
             _indentStack.push_back(_initIndent);
         }
-        Indenter(const string_t& style) : _initIndent(style) {
+        Indenter(const string_t& initIndent) : _initIndent(initIndent) {
             _indentStack.push_back(_initIndent); }
         void setStyle(const string_t& style) { _indentStyle = style; }
         string_t getIndent() const {
@@ -79,6 +79,13 @@ namespace htmlparser {
         mutable string_t _buff = T("");
         mutable Indenter _indenter;
     public:
+        HtmlTextRanderer() {
+        }
+        HtmlTextRanderer(const string_t& initIndent, const string_t& indentStyle) :
+            _indenter(initIndent) {
+                _indenter.setStyle(indentStyle);
+            }
+
         virtual void rander(const HtmlComment&) const override;
         virtual void rander(const HtmlEmptyElement&) const override;
         virtual void rander(const HtmlElement&) const override;

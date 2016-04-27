@@ -76,7 +76,7 @@ namespace htmlparser {
 
     void HtmlTextRanderer::rander(const HtmlComment& comment) const {
         _buff += _indenter.getIndent() + T("<--") + comment.getComment();
-        _buff += T("-->\n");
+        _buff += T("-->");
     }
 
     void HtmlTextRanderer::randerTagBegin(const HtmlElement& element) const {
@@ -88,7 +88,7 @@ namespace htmlparser {
             _buff += T(" ") + iter-> first + T(" = \"") + iter -> second + T("\"");
         }
 
-        _buff += T(">\n");
+        _buff += T(">");
     }
 
     void HtmlTextRanderer::rander(const HtmlEmptyElement& element) const {
@@ -109,11 +109,11 @@ namespace htmlparser {
             _indenter.indentDecrease();
         }
 
-        _buff += _indenter.getIndent() + T("</") + element.getTag() + T(">\n");
+        _buff += _indenter.getIndent() + T("</") + element.getTag() + T(">");
     }
 
     void HtmlTextRanderer::rander(const HtmlText& text) const {
-        _buff += _indenter.getIndent() + text.getText() + T("\n");
+        _buff += _indenter.getIndent() + text.getText() + T("");
     }
 
     void HtmlTextRanderer::rander(const HtmlDocument& document) const {

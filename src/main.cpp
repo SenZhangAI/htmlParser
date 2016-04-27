@@ -63,6 +63,10 @@ int main(int argc, char const* argv[]) {
 
         document->randerBy(textRander);
         textRander.draw();
+
+        HtmlTextRanderer textRander2(T(""),T(""));
+        document->randerBy(textRander2);
+        textRander2.draw();
     //}
 
     return 0;
