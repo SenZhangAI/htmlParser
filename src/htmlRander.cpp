@@ -75,20 +75,20 @@ namespace htmlparser {
 // HtmlTextRanderer
 
     void HtmlTextRanderer::rander(const HtmlComment& comment) const {
-        _buff += _indenter.getIndent() + "<--" + comment.getComment();
-        _buff += "-->\n";
+        _buff += _indenter.getIndent() + T("<--") + comment.getComment();
+        _buff += T("-->\n");
     }
 
     void HtmlTextRanderer::randerTagBegin(const HtmlElement& element) const {
-        _buff += _indenter.getIndent() + "<" + element.getTag();
+        _buff += _indenter.getIndent() + T("<") + element.getTag();
 
         HtmlElement::Attributes attr = element.getAttributes();
 
         for (auto iter = attr.begin(); iter != attr.end(); ++iter) {
-            _buff += " " + iter-> first + " = \"" + iter -> second + "\"";
+            _buff += T(" ") + iter-> first + T(" = \"") + iter -> second + T("\"");
         }
 
-        _buff += ">\n";
+        _buff += T(">\n");
     }
 
     void HtmlTextRanderer::rander(const HtmlEmptyElement& element) const {
@@ -109,11 +109,11 @@ namespace htmlparser {
             _indenter.indentDecrease();
         }
 
-        _buff += _indenter.getIndent() + "</" + element.getTag() + ">\n";
+        _buff += _indenter.getIndent() + T("</") + element.getTag() + T(">\n");
     }
 
     void HtmlTextRanderer::rander(const HtmlText& text) const {
-        _buff += _indenter.getIndent() + text.getText() + "\n";
+        _buff += _indenter.getIndent() + text.getText() + T("\n");
     }
 
     void HtmlTextRanderer::rander(const HtmlDocument& document) const {
