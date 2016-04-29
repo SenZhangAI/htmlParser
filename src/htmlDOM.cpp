@@ -3,14 +3,18 @@
 
 namespace htmlparser {
 
-
     bool HtmlObject::hasSon() const {
         return _sons != nullptr && (_sons->size() != 0) ;
     }
-    HtmlObject* HtmlObject::setParent(HtmlObject* parent) {
-        HtmlObject* old = _parent;
+
+    HtmlObject::Ptr HtmlObject::setParent(Ptr parent) {
+        Ptr old = _parent;
         _parent = parent;
         return old;
+    }
+
+    HtmlObject::Ptr HtmlObject::getParent() {
+        return _parent;
     }
 
     void HtmlObject::addSon(const Ptr& son) {
@@ -19,7 +23,7 @@ namespace htmlparser {
         }
 
         _sons->push_back(son);
-        son->setParent(this);
+        son->setParent(this -> shared_from_this());
     }
 
     HtmlObject_No_Sons::~HtmlObject_No_Sons() {};

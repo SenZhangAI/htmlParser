@@ -8,14 +8,16 @@ namespace htmlparser {
 
     class AbstractLexer;
 
-    class HtmlObject : public Randerable {
+    class HtmlObject :
+        public Randerable,
+        public enable_shared_from_this<HtmlObject> {
     public:
         typedef shared_ptr<HtmlObject> Ptr;
         typedef vector<Ptr>                    Vec;
         typedef shared_ptr<Vec>                Sons;
 
     private:
-        HtmlObject*  _parent = nullptr;
+        Ptr          _parent = nullptr;
         Sons         _sons   = nullptr;
     protected:
 
@@ -23,7 +25,8 @@ namespace htmlparser {
         bool hasSon() const;
         /** addSon注意不能有环, 即父对象直接或间接成为子对象的子对象*/
         void addSon(const Ptr& son);
-        HtmlObject* setParent(HtmlObject* parent);
+        Ptr  setParent(Ptr parent);
+        Ptr  getParent();
 
         virtual ~HtmlObject() {};
 
