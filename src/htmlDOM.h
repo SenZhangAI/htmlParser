@@ -54,8 +54,16 @@ namespace htmlparser {
     private:
         string_t _text;
     public:
-        HtmlText(const string_t& str): _text(str) {}
+        HtmlText(const string_t& str): _text(str) {};
         string_t getText() const { return _text; };
+    };
+
+    class HtmlDocType: public HtmlObject_No_Sons {
+    private:
+        string_t _value;
+    public:
+        HtmlDocType(const string_t& str): _value(str) {};
+        string_t getValue() const { return _value; };
     };
 
     class HtmlElement: public HtmlObject {

@@ -26,6 +26,9 @@ namespace htmlparser {
         else if (auto p = dynamic_cast<HtmlDocument*>(&randerable)) {
             rander(*p);
         }
+        else if (auto p = dynamic_cast<HtmlDocType*>(&randerable)) {
+            rander(*p);
+        }
         else {
             std::cout << "HtmlRanderer: hit no target" << std::endl;
         }
@@ -61,15 +64,17 @@ namespace htmlparser {
 // Indenter
     void Indenter::indentIncrease() {
         _index++;
-        if(_index == _indentStack.size()) {
+
+        if (_index == _indentStack.size()) {
             string_t temp = _indentStack[_index - 1] + _indentStyle;
             _indentStack.push_back(temp);
         }
     }
     void Indenter::indentDecrease() {
         _index--;
-        if(_index < 0)
-           _index = 0;
+
+        if (_index < 0)
+            _index = 0;
     }
 ///////////////////////////////////////////////////////////////////////////////
 // HtmlTextRanderer
@@ -102,9 +107,11 @@ namespace htmlparser {
         // 这里是为了代码更为清晰
         if (element.hasSon()) {
             _indenter.indentIncrease();
+
             for (shared_ptr<HtmlObject> s : * (element._sons)) {
                 s -> randerBy(*this);
             }
+
             _indenter.indentDecrease();
         }
 
@@ -125,6 +132,10 @@ namespace htmlparser {
                 s -> randerBy(*this);
             }
         }
+    }
+
+    void HtmlTextRanderer::rander(const HtmlDocType& doctype) const {
+        _buff += T("<!DOCTYPE ") + doctype.getValue() + T(">");
     }
 
     void HtmlTextRanderer::draw() const {

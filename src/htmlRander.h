@@ -11,6 +11,7 @@ namespace htmlparser {
     class HtmlInlineElement;
     class HtmlText;
     class HtmlDocument;
+    class HtmlDocType;
 
     class Randerable {
     public:
@@ -33,6 +34,7 @@ namespace htmlparser {
         virtual void rander(const HtmlElement&) const = 0;
         virtual void rander(const HtmlText&) const = 0;
         virtual void rander(const HtmlDocument&) const = 0;
+        virtual void rander(const HtmlDocType&) const = 0;
 
         virtual void draw() const = 0;
 
@@ -47,6 +49,7 @@ namespace htmlparser {
         virtual void rander(const HtmlElement&) const override;
         virtual void rander(const HtmlText&) const override;
         virtual void rander(const HtmlDocument&) const override;
+        virtual void rander(const HtmlDocType&) const override;
 
         virtual void draw() const override;
     };
@@ -64,7 +67,8 @@ namespace htmlparser {
             _indentStack.push_back(_initIndent);
         }
         Indenter(const string_t& initIndent) : _initIndent(initIndent) {
-            _indentStack.push_back(_initIndent); }
+            _indentStack.push_back(_initIndent);
+        }
         void setStyle(const string_t& style) { _indentStyle = style; }
         string_t getIndent() const {
             assert(_index >= 0);
@@ -83,14 +87,15 @@ namespace htmlparser {
         }
         HtmlTextRanderer(const string_t& initIndent, const string_t& indentStyle) :
             _indenter(initIndent) {
-                _indenter.setStyle(indentStyle);
-            }
+            _indenter.setStyle(indentStyle);
+        }
 
         virtual void rander(const HtmlComment&) const override;
         virtual void rander(const HtmlInlineElement&) const override;
         virtual void rander(const HtmlElement&) const override;
         virtual void rander(const HtmlText&) const override;
         virtual void rander(const HtmlDocument&) const override;
+        virtual void rander(const HtmlDocType&) const override;
 
         virtual void draw() const override;
 
