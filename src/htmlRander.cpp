@@ -20,7 +20,7 @@ namespace htmlparser {
         else if (auto p = dynamic_cast<HtmlComment*>(&randerable)) {
             rander(*p);
         }
-        else if (auto p = dynamic_cast<HtmlEmptyElement*>(&randerable)) {
+        else if (auto p = dynamic_cast<HtmlInlineElement*>(&randerable)) {
             rander(*p);
         }
         else if (auto p = dynamic_cast<HtmlDocument*>(&randerable)) {
@@ -38,8 +38,8 @@ namespace htmlparser {
         std::cout << "rander HtmlComment by HtmlCanvasRanderer" << std::endl;
     }
 
-    void HtmlCanvasRanderer::rander(const HtmlEmptyElement&) const {
-        std::cout << "rander HtmlEmptyElement by HtmlCanvasRanderer" << std::endl;
+    void HtmlCanvasRanderer::rander(const HtmlInlineElement&) const {
+        std::cout << "rander HtmlInlineElement by HtmlCanvasRanderer" << std::endl;
     }
 
     void HtmlCanvasRanderer::rander(const HtmlElement&) const {
@@ -75,8 +75,7 @@ namespace htmlparser {
 // HtmlTextRanderer
 
     void HtmlTextRanderer::rander(const HtmlComment& comment) const {
-        _buff += _indenter.getIndent() + T("<--") + comment.getComment();
-        _buff += T("-->");
+        _buff += _indenter.getIndent() + comment.getComment();
     }
 
     void HtmlTextRanderer::randerTagBegin(const HtmlElement& element) const {
@@ -91,7 +90,7 @@ namespace htmlparser {
         _buff += T(">");
     }
 
-    void HtmlTextRanderer::rander(const HtmlEmptyElement& element) const {
+    void HtmlTextRanderer::rander(const HtmlInlineElement& element) const {
         randerTagBegin(element);
     }
 

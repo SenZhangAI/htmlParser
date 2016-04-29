@@ -78,9 +78,9 @@ namespace htmlparser {
 
     };
 
-    class HtmlEmptyElement: public HtmlElement {
+    class HtmlInlineElement: public HtmlElement {
     public:
-        HtmlEmptyElement(const string_t& tagName) : HtmlElement(tagName) {};
+        HtmlInlineElement(const string_t& tagName) : HtmlElement(tagName) {};
 
     private:
         void addSon(const Ptr& son) = delete;
