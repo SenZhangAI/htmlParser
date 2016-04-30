@@ -3,3 +3,5 @@
 *.exe
 *.o
 *.core
+readme.markdown
+/doc/draft.txt

@@ -29,7 +29,12 @@ namespace htmlparser {
     HtmlObject_No_Sons::~HtmlObject_No_Sons() {};
 
     void HtmlElement::addAttribute(string_t attribute, string_t value) {
-        _attributes.insert(pair<string_t, string_t>(attribute, value));
+        if (_attributes.find(attribute) != _attributes.end()) {
+            _attributes[attribute] = value;
+        }
+        else {
+            _attributes.insert(pair<string_t, string_t>(attribute, value));
+        }
     }
 
-};
+}
