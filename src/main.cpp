@@ -59,12 +59,11 @@ int main(int argc, char const* argv[]) {
         shared_ptr<HtmlDocument> document = lex.parse(file);
 
         //HtmlCanvasRanderer canvasRander;
-        HtmlTextRanderer textRander;
+        //HtmlTextRanderer textRander;
+        //document->randerBy(textRander);
+        //textRander.draw();
 
-        document->randerBy(textRander);
-        textRander.draw();
-
-        HtmlTextRanderer textRander2(T(""),T(""));
+        HtmlTextRanderer textRander2(T("\n"),T("--->"));
         document->randerBy(textRander2);
         textRander2.draw();
     //}

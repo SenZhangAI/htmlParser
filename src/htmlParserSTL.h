@@ -18,6 +18,7 @@
 #include <fstream>
 #include <iostream>
 #include <cassert>
+#include <cctype>
 
 #define ASSERT(x) assert(x)
 
@@ -42,6 +43,7 @@ namespace htmlparser {
 
     #define strtol_t wcstol
     #define strtod_t wcstod
+    #define tolower_t towlower
 
 #else
     typedef char char_t;
@@ -55,6 +57,7 @@ namespace htmlparser {
     #define T(X) X
     #define strtol_t strtol
     #define strtod_t strtod
+    #define tolower_t tolower
 #endif
 }
 
