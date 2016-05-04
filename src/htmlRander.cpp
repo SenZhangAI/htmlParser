@@ -11,16 +11,16 @@ namespace htmlparser {
     //Multiple dispatch
     //@see https://en.wikipedia.org/wiki/Multiple_dispatch#C.2B.2B
     void HtmlRanderer::rander(Randerable& randerable) const {
-        if (auto p = dynamic_cast<HtmlElement*>(&randerable)) {
-            rander(*p);
-        }
-        else if (auto p = dynamic_cast<HtmlText*>(&randerable)) {
+        if (auto p = dynamic_cast<HtmlText*>(&randerable)) {
             rander(*p);
         }
         else if (auto p = dynamic_cast<HtmlComment*>(&randerable)) {
             rander(*p);
         }
         else if (auto p = dynamic_cast<HtmlInlineElement*>(&randerable)) {
+            rander(*p);
+        }
+        else if (auto p = dynamic_cast<HtmlElement*>(&randerable)) {
             rander(*p);
         }
         else if (auto p = dynamic_cast<HtmlDocument*>(&randerable)) {
@@ -38,7 +38,7 @@ namespace htmlparser {
 // HtmlCanvasRanderer
 
     void HtmlCanvasRanderer::rander(const HtmlComment&) const {
-        std::cout << "rander HtmlComment by HtmlCanvasRanderer" << std::endl;
+        //do nothing
     }
 
     void HtmlCanvasRanderer::rander(const HtmlInlineElement&) const {
@@ -50,11 +50,14 @@ namespace htmlparser {
     }
 
     void HtmlCanvasRanderer::rander(const HtmlText&) const {
-        std::cout << "rander HtmlText by HtmlCanvasRanderer" << std::endl;
+        //do nothing
     }
 
     void HtmlCanvasRanderer::rander(const HtmlDocument&) const {
         std::cout << "rander HtmlDocument by HtmlCanvasRanderer" << std::endl;
+    }
+    void HtmlCanvasRanderer::rander(const HtmlDocType&) const {
+        //do nothing
     }
     void HtmlCanvasRanderer::draw() const {
         std::cout << "draw" << std::endl;
@@ -119,7 +122,7 @@ namespace htmlparser {
     }
 
     void HtmlTextRanderer::rander(const HtmlText& text) const {
-        _buff += _indenter.getIndent() + text.getText() + T("");
+        _buff += _indenter.getIndent() + text.getText();
     }
 
     void HtmlTextRanderer::rander(const HtmlDocument& document) const {
