@@ -68,8 +68,8 @@ namespace htmlparser {
 
     class HtmlElement: public HtmlObject {
     public:
-        typedef string_t                 Tag;
-        typedef map<string_t, string_t>  Attributes; //map<attribute, value>
+        typedef string_t                         Tag;
+        typedef vector<pair<string_t, string_t> >  Attributes; //pair<attribute, value>
     private:
         //Tag 为枚举或许更为合适
         Tag        _tag;
