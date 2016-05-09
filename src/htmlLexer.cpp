@@ -32,6 +32,7 @@ namespace htmlparser {
 
         std::cout << "Now _sz:" << _sz << std::endl;
         std::cout << "Stack:" << std::endl;
+
         for (size_t i = 0; i < _sz; ++i) {
             std::cout << _stack[i] << std::endl;
         }
@@ -141,7 +142,7 @@ namespace htmlparser {
                     //HtmlObject* 转 HtmlElement*
                     currentElement = static_pointer_cast<HtmlElement>(currentElement->getParent());
                     //currentElement.reset((HtmlElement*)(currentElement->getParent().get()));
-                    std::cout << "Now currentElement: "<< currentElement -> getTag() << std::endl;
+                    std::cout << "Now currentElement: " << currentElement -> getTag() << std::endl;
                     num--;
                 }
             }
@@ -184,6 +185,7 @@ namespace htmlparser {
                 std::cout << atLess << std::endl;
                 std::cout << atGreat << std::endl;
                 std::cout << nextLess << std::endl;
+
                 //InText
                 if (atLess > lastGreat + 1) {
                     textStart = html.find_first_not_of(T(" \t\n"), lastGreat + 1);

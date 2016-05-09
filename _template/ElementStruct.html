@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="ElementStruct.css" type="text/css" media="all">
+<meta charset="utf-8">
+</head>
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" hight="100%">
+  <svg style="overflow: hidden; position: absolute; opacity: 1;" x="20" y="20" >
+    <defs>
+    <marker id="markerCircle" markerWidth="8" markerHeight="8" refx="5" refy="5">
+    <circle class="circle" cx="5" cy="5" r="3"/>
+    </marker>
+    <marker id="markerArrow" markerWidth="10" markerHeight="10" refx="2" refy="6" orient="auto">
+    <path class="arrow" d="M2,2 L2,10 L8,6 L2,2"/>
+    </marker>
+    </defs>
+
+    {% content %}
+
+
+    <svg width="120" height="50" x="0" y="50">
+      <rect class="inlineElement" width="116" height="40" x="2" y="5" rx="20" ry="20">
+      </rect>
+      <text x="50%" y="50%" dy=".3em"> html</text>
+    </svg>
+
+    <svg width="120" height="50" x="0" y="100" >
+      <rect width="116" height="40" stroke="#17301D" stroke-width="2"  fill="#017e66" x="2" y="5" rx="20" ry="20">
+      </rect>
+      <text x="50%" y="50%" dy=".3em" fill= "white" text-anchor="middle">html</text>
+    </svg>
+
+    <svg width="120" height="50" x="240" y="50" >
+      <rect width="116" height="40" stroke="#17301D" stroke-width="2"  fill="#017e66" x="2" y="5" rx="20" ry="20">
+      </rect>
+      <text x="50%" y="50%" dy=".3em" fill= "white" text-anchor="middle">html</text>
+    </svg>
+
+    <path class="arrowPath" d="M120,25 C180,25,180,75,232,75" style="marker-end:url(#markerArrow)">
+    </path>
+
+  </svg>
+
+</svg>
+
+</body>
+</html>
+

@@ -30,8 +30,9 @@ namespace htmlparser {
 
     void HtmlElement::addAttribute(string_t attribute, string_t value) {
         auto iter = _attributes.begin();
-        while (iter != _attributes.end()){
-            if ( iter -> first == attribute )
+
+        while (iter != _attributes.end()) {
+            if (iter -> first == attribute)
                 break;
 
             ++iter;

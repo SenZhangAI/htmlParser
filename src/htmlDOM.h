@@ -18,8 +18,8 @@ namespace htmlparser {
 
     private:
         Ptr          _parent = nullptr;
-        Sons         _sons   = nullptr;
     protected:
+        Sons         _sons   = nullptr;
 
     public:
         bool hasSon() const;
@@ -31,6 +31,7 @@ namespace htmlparser {
         virtual ~HtmlObject() {};
 
         //为了方便直接访问 _sons
+        friend class HtmlRanderer;
         friend class HtmlTextRanderer;
         friend class HtmlCanvasRanderer;
     };

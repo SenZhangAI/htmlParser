@@ -1,0 +1,37 @@
+html,body,svg {
+  height:100%;
+}
+
+.element, .inlineElement {
+  stroke: #17301D;
+  stroke-width: 2px;
+}
+
+.element {
+  fill: #017e66;
+}
+
+.inlineElement {
+  fill: #999999;
+}
+
+svg text {
+  fill:#eeeeee;
+  text-anchor:middle;
+  font: bold 24px sans-serif;
+}
+
+.arrowPath {
+  stroke: #6666ff;
+  stroke-width: 2px;
+  fill: none;
+}
+
+.arrow {
+  fill:#6666ff;
+}
+
+.circle {
+  stroke:none;
+  fill:#111111;
+}
