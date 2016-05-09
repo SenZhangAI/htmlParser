@@ -33,7 +33,7 @@ namespace htmlparser {
         //为了方便直接访问 _sons
         friend class HtmlRanderer;
         friend class HtmlTextRanderer;
-        friend class HtmlCanvasRanderer;
+        friend class HtmlSVGRanderer;
     };
 
     class HtmlObject_No_Sons : public HtmlObject {

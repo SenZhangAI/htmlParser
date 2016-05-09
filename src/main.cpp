@@ -17,7 +17,7 @@ int main(int argc, char const* argv[]) {
     HtmlLexer lex;
     shared_ptr<HtmlDocument> document = lex.parse(file);
 
-    HtmlCanvasRanderer canvasRander;
+    HtmlSVGRanderer canvasRander;
     //HtmlTextRanderer textRander;
     //document->randerBy(textRander);
     //textRander.draw();

@@ -42,7 +42,7 @@ namespace htmlparser {
     };
 
 
-    class HtmlCanvasRanderer : public HtmlRanderer {
+    class HtmlSVGRanderer : public HtmlRanderer {
     private:
         const static int _WIDTH = 120;
         const static int _HEIGHT = 50;
@@ -57,7 +57,7 @@ namespace htmlparser {
         string_t _drawBox(int width, int height, int x, int y, const string_t& elementType, const string_t& tagname) const;
         string_t _drawArrowPath(int width, int height, int xFrom, int yFrom, int xTo, int yTo) const;
     public:
-        HtmlCanvasRanderer();
+        HtmlSVGRanderer();
 
         virtual void rander(const HtmlComment&) const override;
         virtual void rander(const HtmlInlineElement&) const override;

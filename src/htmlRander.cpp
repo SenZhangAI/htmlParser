@@ -44,13 +44,13 @@ namespace htmlparser {
     }
 
 ///////////////////////////////////////////////////////////////////////////////
-// HtmlCanvasRanderer
-    HtmlCanvasRanderer::HtmlCanvasRanderer() {
+// HtmlSVGRanderer
+    HtmlSVGRanderer::HtmlSVGRanderer() {
         _boxFmt = htmlio::ReadAnsiFile(T("./_template/_box.html"));
         _arrowPathFmt = htmlio::ReadAnsiFile(T("./_template/_arrowPath.html"));
     }
 
-    string_t HtmlCanvasRanderer::_drawBox(int width, int height, int x, int y, const string_t& elementType,
+    string_t HtmlSVGRanderer::_drawBox(int width, int height, int x, int y, const string_t& elementType,
                                           const string_t& tagname) const {
 
         stringstream_t buf;
@@ -59,7 +59,7 @@ namespace htmlparser {
         return buf.str();
     }
 
-    string_t HtmlCanvasRanderer::_drawArrowPath(int width, int height, int xFrom, int yFrom, int xTo, int yTo) const {
+    string_t HtmlSVGRanderer::_drawArrowPath(int width, int height, int xFrom, int yFrom, int xTo, int yTo) const {
         stringstream_t buf;
         int x1 = width * (2 * xFrom + 1);
         int y1 = yFrom * height + height / 2;
@@ -74,15 +74,15 @@ namespace htmlparser {
         return buf.str();
     }
 
-    void HtmlCanvasRanderer::rander(const HtmlComment&) const {
+    void HtmlSVGRanderer::rander(const HtmlComment&) const {
         //do nothing
     }
 
-    void HtmlCanvasRanderer::rander(const HtmlInlineElement& e) const {
+    void HtmlSVGRanderer::rander(const HtmlInlineElement& e) const {
         _buff += _drawBox(_WIDTH, _HEIGHT, _x, _y, "inlineElement", e.getTag());
     }
 
-    void HtmlCanvasRanderer::rander(const HtmlElement& element) const {
+    void HtmlSVGRanderer::rander(const HtmlElement& element) const {
         int yTmp = _y;
 
 
@@ -105,17 +105,17 @@ namespace htmlparser {
 
     }
 
-    void HtmlCanvasRanderer::rander(const HtmlText&) const {
+    void HtmlSVGRanderer::rander(const HtmlText&) const {
         //do nothing
     }
 
-    void HtmlCanvasRanderer::rander(const HtmlDocument& document) const {
+    void HtmlSVGRanderer::rander(const HtmlDocument& document) const {
         HtmlRanderer::rander(document);
     }
-    void HtmlCanvasRanderer::rander(const HtmlDocType&) const {
+    void HtmlSVGRanderer::rander(const HtmlDocType&) const {
         //do nothing
     }
-    void HtmlCanvasRanderer::draw() const {
+    void HtmlSVGRanderer::draw() const {
         std::cout << _buff << std::endl;
     };
 
