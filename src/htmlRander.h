@@ -41,7 +41,7 @@ namespace htmlparser {
         virtual ~HtmlRanderer() {};
     };
 
-
+    //生成Element的父子关系结构的SVG图片
     class HtmlSVGRanderer : public HtmlRanderer {
     private:
         const static int _WIDTH = 120;
@@ -54,6 +54,8 @@ namespace htmlparser {
         mutable int _x = 0; // row
         mutable int _y = 0; // column
 
+        //x 与 y 控制grid的位置，可理解为行，列，取值 0...n
+        //而实际尺寸由width和height控制
         string_t _drawBox(int width, int height, int x, int y, const string_t& elementType, const string_t& tagname) const;
         string_t _drawArrowPath(int width, int height, int xFrom, int yFrom, int xTo, int yTo) const;
     public:
@@ -81,29 +83,51 @@ namespace htmlparser {
         Indenter() {
             _indentStack.push_back(_initIndent);
         }
-        Indenter(const string_t& initIndent) : _initIndent(initIndent) {
+        Indenter(const string_t& init, const string_t& style) : _initIndent(init), _indentStyle(style) {
             _indentStack.push_back(_initIndent);
         }
-        void setStyle(const string_t& style) { _indentStyle = style; }
+
         string_t getIndent() const {
-            assert(_index >= 0);
+            ASSERT(_index >= 0);
             return _indentStack[_index];
         }
         void indentIncrease();
         void indentDecrease();
     };
 
+    //生成对应的Html源码的文本文件
+    //例如可用于代码格式化和纠错
     class HtmlTextRanderer : public HtmlRanderer {
     private:
         mutable string_t _buff = T("");
         mutable Indenter _indenter;
     public:
-        HtmlTextRanderer() {
-        }
+        HtmlTextRanderer() { };
         HtmlTextRanderer(const string_t& initIndent, const string_t& indentStyle) :
-            _indenter(initIndent) {
-            _indenter.setStyle(indentStyle);
-        }
+            _indenter(initIndent, indentStyle) { };
+
+        virtual void rander(const HtmlComment&) const override;
+        virtual void rander(const HtmlInlineElement&) const override;
+        virtual void rander(const HtmlElement&) const override;
+        virtual void rander(const HtmlText&) const override;
+        virtual void rander(const HtmlDocument&) const override;
+        virtual void rander(const HtmlDocType&) const override;
+
+        virtual void draw() const override;
+
+    private:
+        void randerTagBegin(const HtmlElement&) const;
+    };
+
+    //生成Html内置的code代码并高亮
+    class HtmlCodeRanderer : public HtmlRanderer {
+    private:
+        mutable string_t _buff = T("");
+        mutable Indenter _indenter;
+    public:
+        HtmlCodeRanderer() : _indenter(T("\n"), T("")) { };
+        HtmlCodeRanderer(const string_t& initIndent, const string_t& indentStyle) :
+            _indenter(initIndent, indentStyle) { };
 
         virtual void rander(const HtmlComment&) const override;
         virtual void rander(const HtmlInlineElement&) const override;
