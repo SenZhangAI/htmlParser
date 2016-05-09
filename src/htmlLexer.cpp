@@ -133,12 +133,13 @@ namespace htmlparser {
             size_t pos = tagStack.find(_closeTag);
             size_t num = tagStack.size() - pos + 1;
 
-            if (pos < 0) {
+            if (pos <= 0) {
                 currentElement -> addSon(make_shared<HtmlElement>(_closeTag));
             }
             else {
+                tagStack.pop(num);
+
                 while (num > 0) {
-                    tagStack.pop(1);
                     //HtmlObject* 转 HtmlElement*
                     currentElement = static_pointer_cast<HtmlElement>(currentElement->getParent());
                     //currentElement.reset((HtmlElement*)(currentElement->getParent().get()));
