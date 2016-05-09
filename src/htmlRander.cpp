@@ -85,7 +85,6 @@ namespace htmlparser {
     void HtmlSVGRanderer::rander(const HtmlElement& element) const {
         int yTmp = _y;
 
-
         if (element.hasSon()) {
             _x++;
 
@@ -95,7 +94,6 @@ namespace htmlparser {
                     s -> randerBy(*this);
 
                     _y++;
-
                 }
             }
 
@@ -139,7 +137,7 @@ namespace htmlparser {
 // HtmlTextRanderer
 
     void HtmlTextRanderer::rander(const HtmlComment& comment) const {
-        _buff += _indenter.getIndent() + comment.getComment();
+        _buff += _indenter.getIndent() + T("<!--") + comment.getComment() + T("-->");
     }
 
     void HtmlTextRanderer::randerTagBegin(const HtmlElement& element) const {
@@ -192,4 +190,70 @@ namespace htmlparser {
     void HtmlTextRanderer::draw() const {
         std::cout << _buff << std::endl;
     };
+///////////////////////////////////////////////////////////////////////////////
+// HtmlCodeRanderer
+
+    //如下代码的class命名规则采用pygment的命名规则
+
+    void HtmlCodeRanderer::rander(const HtmlComment& comment) const {
+        _buff += _indenter.getIndent() + T("<span class=\"c1\">&lt;!--") + comment.getComment() +
+               T("--&gt;</span>");
+    }
+
+    void HtmlCodeRanderer::randerTagBegin(const HtmlElement& element) const {
+        _buff += _indenter.getIndent() + T("<span class=\"nt\">&lt;") + element.getTag() + T("</span>");
+
+        HtmlElement::Attributes attr = element.getAttributes();
+
+        for (auto iter = attr.begin(); iter != attr.end(); ++iter) {
+            _buff += _indenter.getIndent() + T("<span class=\"na\">") +
+                    iter-> first + T("=</span>");
+            _buff += _indenter.getIndent() + T("<span class=\"s\">\"") +
+                    iter-> first + T("\"</span>");
+        }
+
+        _buff += _indenter.getIndent() + T("<span class=\"nt\">&gt;</span>");
+    }
+
+    void HtmlCodeRanderer::rander(const HtmlInlineElement& element) const {
+        randerTagBegin(element);
+    }
+
+    void HtmlCodeRanderer::rander(const HtmlElement& element) const {
+        randerTagBegin(element);
+
+        // 此部分放在htmlObject对象中或许更好
+        // 一方面可强制检查nullptr，另一方面可以复用
+        // 这里是为了代码更为清晰
+        if (element.hasSon()) {
+            _indenter.indentIncrease();
+
+            for (shared_ptr<HtmlObject> s : * (element._sons)) {
+                s -> randerBy(*this);
+            }
+
+            _indenter.indentDecrease();
+        }
+
+        _buff += _indenter.getIndent() + T("<span class=\"nt\">&lt;/") +
+                element.getTag() + T("&gt;</span>");
+    }
+
+    void HtmlCodeRanderer::rander(const HtmlText& text) const {
+        _buff += _indenter.getIndent() + text.getText();
+    }
+
+    void HtmlCodeRanderer::rander(const HtmlDocument& document) const {
+        HtmlRanderer::rander(document);
+    }
+
+    void HtmlCodeRanderer::rander(const HtmlDocType& doctype) const {
+        _buff += T("<span class=\"cp\">&lt;!DOCTYPE ") +
+                doctype.getValue() + T("&gt;</span>");
+    }
+
+    void HtmlCodeRanderer::draw() const {
+        std::cout << _buff << std::endl;
+    };
+
 }

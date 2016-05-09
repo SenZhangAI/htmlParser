@@ -142,6 +142,7 @@ namespace htmlparser {
                 while (num > 0) {
                     //HtmlObject* 转 HtmlElement*
                     currentElement = static_pointer_cast<HtmlElement>(currentElement->getParent());
+                    //如下的转换失败，改用如上代码
                     //currentElement.reset((HtmlElement*)(currentElement->getParent().get()));
                     std::cout << "Now currentElement: " << currentElement -> getTag() << std::endl;
                     num--;
@@ -243,11 +244,11 @@ namespace htmlparser {
 
                 if (tagStack.size() == 0) {
                     document -> addSon(make_shared<HtmlComment>(
-                                           html.substr(atLess, atGreat + 1 - atLess)));
+                                           html.substr(tkStart + 3, atGreat - atLess - 6)));
                 }
                 else {
                     currentElement -> addSon(make_shared<HtmlComment>(
-                                                 html.substr(atLess, atGreat + 1 - atLess)));
+                                                 html.substr(tkStart + 3, atGreat - atLess - 6)));
                 }
 
                 state = State::Begin;

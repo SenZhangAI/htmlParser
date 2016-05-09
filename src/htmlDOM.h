@@ -34,6 +34,7 @@ namespace htmlparser {
         friend class HtmlRanderer;
         friend class HtmlTextRanderer;
         friend class HtmlSVGRanderer;
+        friend class HtmlCodeRanderer;
     };
 
     class HtmlObject_No_Sons : public HtmlObject {

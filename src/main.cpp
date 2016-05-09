@@ -17,17 +17,26 @@ int main(int argc, char const* argv[]) {
     HtmlLexer lex;
     shared_ptr<HtmlDocument> document = lex.parse(file);
 
-    HtmlSVGRanderer canvasRander;
     //HtmlTextRanderer textRander;
     //document->randerBy(textRander);
     //textRander.draw();
 
-    document -> randerBy(canvasRander);
-    canvasRander.draw();
-
     //HtmlTextRanderer textRander2(T("\n"),T("--->"));
     //document->randerBy(textRander2);
     //textRander2.draw();
+
+    HtmlTextRanderer textRander3(T("\n"),T("  "));
+    document->randerBy(textRander3);
+    textRander3.draw();
+
+    //HtmlTextRanderer textRander4(T(""),T(""));
+    //document->randerBy(textRander4);
+    //textRander4.draw();
+
+    //HtmlSVGRanderer canvasRander;
+    //document -> randerBy(canvasRander);
+    //canvasRander.draw();
+
     //}
 
     return 0;
