@@ -25,7 +25,7 @@ int main(int argc, char const* argv[]) {
     //document->randerBy(textRander2);
     //textRander2.draw();
 
-    HtmlTextRanderer textRander3(T("\n"),T("  "));
+    HtmlTextRanderer textRander3(T("\n"), T("  "));
     document->randerBy(textRander3);
     textRander3.draw();
 
@@ -36,6 +36,10 @@ int main(int argc, char const* argv[]) {
     //HtmlSVGRanderer canvasRander;
     //document -> randerBy(canvasRander);
     //canvasRander.draw();
+
+    HtmlCodeRanderer codeRander;
+    document -> randerBy(codeRander);
+    codeRander.draw();
 
     //}
 

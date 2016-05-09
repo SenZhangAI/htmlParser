@@ -51,7 +51,7 @@ namespace htmlparser {
     }
 
     string_t HtmlSVGRanderer::_drawBox(int width, int height, int x, int y, const string_t& elementType,
-                                          const string_t& tagname) const {
+                                       const string_t& tagname) const {
 
         stringstream_t buf;
         htmlio::Sprintf(buf, _boxFmt, 0, width, height, x * 2 * width, y * height, elementType, width - 4, height - 10,
@@ -99,6 +99,7 @@ namespace htmlparser {
 
             _x--;
         }
+
         _buff += _drawBox(_WIDTH, _HEIGHT, _x, yTmp, "element", element.getTag());
 
     }
@@ -197,7 +198,7 @@ namespace htmlparser {
 
     void HtmlCodeRanderer::rander(const HtmlComment& comment) const {
         _buff += _indenter.getIndent() + T("<span class=\"c1\">&lt;!--") + comment.getComment() +
-               T("--&gt;</span>");
+                 T("--&gt;</span>");
     }
 
     void HtmlCodeRanderer::randerTagBegin(const HtmlElement& element) const {
@@ -206,13 +207,11 @@ namespace htmlparser {
         HtmlElement::Attributes attr = element.getAttributes();
 
         for (auto iter = attr.begin(); iter != attr.end(); ++iter) {
-            _buff += _indenter.getIndent() + T("<span class=\"na\">") +
-                    iter-> first + T("=</span>");
-            _buff += _indenter.getIndent() + T("<span class=\"s\">\"") +
-                    iter-> first + T("\"</span>");
+            _buff += T("<span class=\"na\"> ") + iter->first + T("=</span>") +
+                     T("<span class=\"s\">\"") + iter->second + T("\"</span>");
         }
 
-        _buff += _indenter.getIndent() + T("<span class=\"nt\">&gt;</span>");
+        _buff += T("<span class=\"nt\">&gt;</span>");
     }
 
     void HtmlCodeRanderer::rander(const HtmlInlineElement& element) const {
@@ -236,7 +235,7 @@ namespace htmlparser {
         }
 
         _buff += _indenter.getIndent() + T("<span class=\"nt\">&lt;/") +
-                element.getTag() + T("&gt;</span>");
+                 element.getTag() + T("&gt;</span>");
     }
 
     void HtmlCodeRanderer::rander(const HtmlText& text) const {
@@ -249,7 +248,7 @@ namespace htmlparser {
 
     void HtmlCodeRanderer::rander(const HtmlDocType& doctype) const {
         _buff += T("<span class=\"cp\">&lt;!DOCTYPE ") +
-                doctype.getValue() + T("&gt;</span>");
+                 doctype.getValue() + T("&gt;</span>");
     }
 
     void HtmlCodeRanderer::draw() const {

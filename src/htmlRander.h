@@ -125,7 +125,7 @@ namespace htmlparser {
         mutable string_t _buff = T("");
         mutable Indenter _indenter;
     public:
-        HtmlCodeRanderer() : _indenter(T("\n"), T("")) { };
+        HtmlCodeRanderer() : _indenter(T("\n"), T("  ")) { };
         HtmlCodeRanderer(const string_t& initIndent, const string_t& indentStyle) :
             _indenter(initIndent, indentStyle) { };
 
