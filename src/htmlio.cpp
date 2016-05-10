@@ -19,11 +19,11 @@ namespace htmlparser {
             return buffer.c_str();
         }
 
-        void WriteAnsiFile(string_t fileName, stringstream_t& ss) {
-#ifdef _UNICODE_TINYMOE
-            string buffer = wtoa(ss.str());
+        void WriteAnsiFile(string_t fileName, const string_t& ss) {
+#ifdef _UNICODE_HTMLPARSER
+            string buffer = wtoa(ss);
 #else
-            string buffer = ss.str();
+            string buffer = ss;
 #endif
 
             ofstream o(fileName, ios_base::binary);
@@ -40,7 +40,7 @@ namespace htmlparser {
             buffer.resize((size_t)pos);
             i.read(&buffer[0], pos);
 
-#ifdef _UNICODE_TINYMOE
+#ifdef _UNICODE_HTMLPARSER
             return atow(buffer);
 #else
             return buffer;

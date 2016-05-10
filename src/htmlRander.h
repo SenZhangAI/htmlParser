@@ -27,6 +27,9 @@ namespace htmlparser {
     };
 
     class HtmlRanderer : public AbstractRanderer {
+    protected:
+        mutable string_t _buff = T("");
+        string_t _outputFile = T("");
     public:
         virtual void rander(Randerable&) const override final;
 
@@ -37,7 +40,7 @@ namespace htmlparser {
         virtual void rander(const HtmlDocument&) const = 0;
         virtual void rander(const HtmlDocType&) const = 0;
 
-        virtual void draw() const = 0;
+        virtual void draw() const;
 
         virtual ~HtmlRanderer() {};
     };
@@ -52,7 +55,6 @@ namespace htmlparser {
         string_t _arrowPathFmt;
         string_t _htmlFmt;
 
-        mutable string_t _buff = T("");
         mutable int _x = 0; // row
         mutable int _y = 0; // column
 
@@ -70,7 +72,6 @@ namespace htmlparser {
         virtual void rander(const HtmlDocument&) const override;
         virtual void rander(const HtmlDocType&) const override;
 
-        virtual void draw() const override;
     };
 
     class Indenter {
@@ -101,12 +102,15 @@ namespace htmlparser {
     //例如可用于代码格式化和纠错
     class HtmlTextRanderer : public HtmlRanderer {
     private:
-        mutable string_t _buff = T("");
         mutable Indenter _indenter;
     public:
-        HtmlTextRanderer() { };
+        HtmlTextRanderer() {
+            _outputFile = T("./_output/CodeStyle.txt");
+        };
         HtmlTextRanderer(const string_t& initIndent, const string_t& indentStyle) :
-            _indenter(initIndent, indentStyle) { };
+            _indenter(initIndent, indentStyle) {
+                _outputFile = T("./_output/CodeStyle.txt");
+            };
 
         virtual void rander(const HtmlComment&) const override;
         virtual void rander(const HtmlInlineElement&) const override;
@@ -114,8 +118,6 @@ namespace htmlparser {
         virtual void rander(const HtmlText&) const override;
         virtual void rander(const HtmlDocument&) const override;
         virtual void rander(const HtmlDocType&) const override;
-
-        virtual void draw() const override;
 
     private:
         void randerTagBegin(const HtmlElement&) const;
@@ -126,11 +128,11 @@ namespace htmlparser {
     private:
         string_t _htmlFmt;
 
-        mutable string_t _buff = T("");
         mutable Indenter _indenter;
     public:
         HtmlCodeRanderer() : _indenter(T("\n"), T("  ")) {
             _htmlFmt = htmlio::ReadAnsiFile(T("./_template/CodeHighlight.html"));
+            _outputFile = T("./_output/CodeHighlight.html");
         };
         HtmlCodeRanderer(const string_t& initIndent, const string_t& indentStyle) :
             _indenter(initIndent, indentStyle) { };
@@ -141,8 +143,6 @@ namespace htmlparser {
         virtual void rander(const HtmlText&) const override;
         virtual void rander(const HtmlDocument&) const override;
         virtual void rander(const HtmlDocType&) const override;
-
-        virtual void draw() const override;
 
     private:
         void randerTagBegin(const HtmlElement&) const;

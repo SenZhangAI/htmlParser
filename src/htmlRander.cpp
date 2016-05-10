@@ -42,12 +42,19 @@ namespace htmlparser {
         }
     }
 
+    void HtmlRanderer::draw() const {
+        if (!_outputFile.empty()) {
+            htmlio::WriteAnsiFile(_outputFile, _buff);
+        }
+    };
+
 ///////////////////////////////////////////////////////////////////////////////
 // HtmlSVGRanderer
     HtmlSVGRanderer::HtmlSVGRanderer() {
         _boxFmt = htmlio::ReadAnsiFile(T("./_template/_box.html"));
         _arrowPathFmt = htmlio::ReadAnsiFile(T("./_template/_arrowPath.html"));
         _htmlFmt = htmlio::ReadAnsiFile(T("./_template/ElementSVG.html"));
+        _outputFile = T("./_output/ElementSVG.html");
     }
 
     string_t HtmlSVGRanderer::_drawBox(int width, int height, int x, int y, const string_t& elementType,
@@ -110,7 +117,6 @@ namespace htmlparser {
 
     void HtmlSVGRanderer::rander(const HtmlDocument& document) const {
         _buff.clear();
-        std::cout << _htmlFmt << std::endl;
         string_t::size_type pos = _htmlFmt.find("{% content %}");
         _buff += _htmlFmt.substr(0, pos);
 
@@ -122,9 +128,6 @@ namespace htmlparser {
     void HtmlSVGRanderer::rander(const HtmlDocType&) const {
         //do nothing
     }
-    void HtmlSVGRanderer::draw() const {
-        std::cout << _buff << std::endl;
-    };
 
 ///////////////////////////////////////////////////////////////////////////////
 // Indenter
@@ -196,9 +199,6 @@ namespace htmlparser {
         _buff += T("<!DOCTYPE ") + doctype.getValue() + T(">");
     }
 
-    void HtmlTextRanderer::draw() const {
-        std::cout << _buff << std::endl;
-    };
 ///////////////////////////////////////////////////////////////////////////////
 // HtmlCodeRanderer
 
@@ -265,9 +265,5 @@ namespace htmlparser {
         _buff += T("<span class=\"cp\">&lt;!DOCTYPE ") +
                  doctype.getValue() + T("&gt;</span>");
     }
-
-    void HtmlCodeRanderer::draw() const {
-        std::cout << _buff << std::endl;
-    };
 
 }

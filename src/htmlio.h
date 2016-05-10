@@ -10,7 +10,7 @@ namespace htmlparser {
         wstring atow(const string& s);
         string wtoa(const wstring& s);
 
-        void WriteAnsiFile(string_t fileName, stringstream_t& ss);
+        void WriteAnsiFile(string_t fileName, const string_t& ss);
         string_t ReadAnsiFile(string_t fileName);
 
         inline void Sprintf(stringstream_t& s, const string_t& fmt, string_t::size_type pos) {
