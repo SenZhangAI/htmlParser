@@ -2,6 +2,7 @@
 #define HTMLRANDER_H_
 
 #include "HtmlParserSTL.h"
+#include "htmlio.h"
 
 namespace htmlparser {
 
@@ -49,6 +50,7 @@ namespace htmlparser {
 
         string_t _boxFmt;
         string_t _arrowPathFmt;
+        string_t _htmlFmt;
 
         mutable string_t _buff = T("");
         mutable int _x = 0; // row
@@ -122,10 +124,14 @@ namespace htmlparser {
     //生成Html内置的code代码并高亮
     class HtmlCodeRanderer : public HtmlRanderer {
     private:
+        string_t _htmlFmt;
+
         mutable string_t _buff = T("");
         mutable Indenter _indenter;
     public:
-        HtmlCodeRanderer() : _indenter(T("\n"), T("  ")) { };
+        HtmlCodeRanderer() : _indenter(T("\n"), T("  ")) {
+            _htmlFmt = htmlio::ReadAnsiFile(T("./_template/CodeHighlight.html"));
+        };
         HtmlCodeRanderer(const string_t& initIndent, const string_t& indentStyle) :
             _indenter(initIndent, indentStyle) { };
 

@@ -25,9 +25,9 @@ int main(int argc, char const* argv[]) {
     //document->randerBy(textRander2);
     //textRander2.draw();
 
-    HtmlTextRanderer textRander3(T("\n"), T("  "));
-    document->randerBy(textRander3);
-    textRander3.draw();
+    //HtmlTextRanderer textRander3(T("\n"), T("  "));
+    //document->randerBy(textRander3);
+    //textRander3.draw();
 
     //HtmlTextRanderer textRander4(T(""),T(""));
     //document->randerBy(textRander4);

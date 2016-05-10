@@ -1,7 +1,6 @@
 #include "htmlParserSTL.h"
 #include "htmlRander.h"
 #include "htmlDOM.h"
-#include "htmlio.h"
 
 namespace htmlparser {
 
@@ -48,6 +47,7 @@ namespace htmlparser {
     HtmlSVGRanderer::HtmlSVGRanderer() {
         _boxFmt = htmlio::ReadAnsiFile(T("./_template/_box.html"));
         _arrowPathFmt = htmlio::ReadAnsiFile(T("./_template/_arrowPath.html"));
+        _htmlFmt = htmlio::ReadAnsiFile(T("./_template/ElementSVG.html"));
     }
 
     string_t HtmlSVGRanderer::_drawBox(int width, int height, int x, int y, const string_t& elementType,
@@ -109,7 +109,15 @@ namespace htmlparser {
     }
 
     void HtmlSVGRanderer::rander(const HtmlDocument& document) const {
+        _buff.clear();
+        std::cout << _htmlFmt << std::endl;
+        string_t::size_type pos = _htmlFmt.find("{% content %}");
+        _buff += _htmlFmt.substr(0, pos);
+
         HtmlRanderer::rander(document);
+
+        pos += 13; //13 = size of string: {% content %}
+        _buff += _htmlFmt.substr(pos);
     }
     void HtmlSVGRanderer::rander(const HtmlDocType&) const {
         //do nothing
@@ -243,7 +251,14 @@ namespace htmlparser {
     }
 
     void HtmlCodeRanderer::rander(const HtmlDocument& document) const {
+        _buff.clear();
+        string_t::size_type pos = _htmlFmt.find("{% content %}");
+        _buff += _htmlFmt.substr(0, pos);
+
         HtmlRanderer::rander(document);
+
+        pos += 13; //13 = size of string: {% content %}
+        _buff += _htmlFmt.substr(pos);
     }
 
     void HtmlCodeRanderer::rander(const HtmlDocType& doctype) const {
