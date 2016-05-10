@@ -1,0 +1,31 @@
+/* Syntax highlighting for Pygmnets */
+
+.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
+.highlight .c1 { color: #408080; font-style: normal } /* Comment.Single */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+
+pre {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  line-height: 1.43
+  color: #333;
+  font-size: 1.2em;
+  border: none;
+  border-left: solid 6px #558abb;
+  background: #fcf6f2;
+  word-wrap:normal;
+  word-break:normal;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+pre code {
+    white-space: pre-wrap;
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+    color: inherit;
+    background: transparent;
+    border-radius: 0;
+}
