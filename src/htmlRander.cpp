@@ -140,10 +140,10 @@ namespace htmlparser {
         }
     }
     void Indenter::indentDecrease() {
-        _index--;
-
-        if (_index < 0)
-            _index = 0;
+        if (_index == 0)
+            return;
+        else
+            _index--;
     }
 ///////////////////////////////////////////////////////////////////////////////
 // HtmlTextRanderer

@@ -82,7 +82,7 @@ namespace htmlparser {
         TagStack tagStack;
         string_t::size_type tkStart, tkEnd, atLess, atGreat, nextLess, lastGreat;
         string_t::size_type textStart, textEnd;
-        string_t::size_type attrStart, attrEnd, valueStart, valueEnd, equalSign, nextSign;
+        string_t::size_type attrStart, attrEnd, valueStart, valueEnd, nextSign;
         string_t attrTmp, valueTmp, tagTmp;
 
         //根据tag，判断state

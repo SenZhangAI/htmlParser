@@ -5,3 +5,5 @@
 *.core
 readme.markdown
 /doc/draft.txt
+/_output
+!/_output/assets
