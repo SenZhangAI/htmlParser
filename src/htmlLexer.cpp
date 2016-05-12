@@ -39,7 +39,7 @@ namespace htmlparser {
     }
 
     size_t TagStack::pop(size_t i) {
-        ASSERT(_sz > i);
+        ASSERT(_sz >= i);
         std::cout << "Origin _sz:" << _sz << std::endl;
         _sz -= i;
         std::cout << "Now _sz:" << _sz << std::endl;
@@ -91,7 +91,6 @@ namespace htmlparser {
             transform(_tag.begin(), _tag.end(), _tag.begin(), ::tolower_t);
             std::cout << "_tag: " << _tag << std::endl;
 
-
             assist.inlineElement = false;
             assist.inlineElement =
                 _tag == T("br")       ? true :
@@ -139,21 +138,23 @@ namespace htmlparser {
             else {
                 tagStack.pop(num);
 
-                while (num > 0) {
-                    //HtmlObject* 转 HtmlElement*
-                    currentElement = static_pointer_cast<HtmlElement>(currentElement->getParent());
-                    //如下的转换失败，改用如上代码
-                    //currentElement.reset((HtmlElement*)(currentElement->getParent().get()));
-                    std::cout << "Now currentElement: " << currentElement -> getTag() << std::endl;
-                    num--;
+                if (tagStack.size() > 0) {
+                    while (num > 0) {
+                        //HtmlObject* 转 HtmlElement*
+                        currentElement = static_pointer_cast<HtmlElement>(currentElement->getParent());
+                        //如下的转换失败，改用如上代码
+                        //currentElement.reset((HtmlElement*)(currentElement->getParent().get()));
+                        std::cout << "Now currentElement: " << currentElement -> getTag() << std::endl;
+                        num--;
+                    }
                 }
             }
         };
 
         nextLess = html.find(T('<'));
-        atGreat = -1;
+        atGreat = 0;
 
-        while (nextLess != string_t::npos && atLess != string_t::npos) {
+        while (true) {
             switch (state) {
             case State::Begin:
                 std::cout << "in begin" << std::endl;
@@ -161,23 +162,24 @@ namespace htmlparser {
                 if (atGreat == html.size() - 1)
                     return document;
 
-                atLess = nextLess;
-                nextLess = html.find(T('<'), atLess + 1);
-                lastGreat = atGreat;
-                atGreat = html.find(T('>'), atGreat + 1);
-
-                if (atLess == string_t::npos || atGreat == string_t::npos) {
+                if (nextLess == string_t::npos) {
+                    lastGreat = atGreat;
+                    atLess = html.size() - 1;
                     state = State::FinalState;
                     break;
                 }
 
-                while (atGreat < atLess) {
-                    atGreat = html.find(T('>'), atGreat + 1);
-                }
+                lastGreat = atGreat;
+                atLess = nextLess;
+                atGreat = html.find(T('>'), atLess + 1);
 
-                while (nextLess != string_t::npos && nextLess < atGreat) {
-                    atLess = nextLess;
-                    nextLess = html.find(T('<'), atLess + 1);
+                if (atGreat == string_t::npos) {
+                    atLess = html.size() - 1;
+                    state = State::FinalState;
+                    break;
+                }
+                else {
+                    nextLess = html.find(T('<'), atGreat + 1);
                 }
 
                 //以上确保前置条件：
@@ -234,13 +236,15 @@ namespace htmlparser {
                 std::cout << "in comment" << std::endl;
 
                 //暂时不考虑 -- \n\t> 的情况
-                //因comment让>失效，重新设置atGreat
+                //因comment让>失效，重新设置atGreat,和nextLess
                 atGreat = html.find(T("-->"), tkStart + 2);
 
                 if (atGreat != string_t::npos)
                     atGreat += 2;
                 else
                     atGreat = html.size() - 1;
+
+                nextLess = html.find(T('<'), atGreat + 1);
 
                 if (tagStack.size() == 0) {
                     document -> addSon(make_shared<HtmlComment>(
@@ -318,8 +322,10 @@ namespace htmlparser {
                         currentElement->addAttribute(attrTmp, T(""));
                     }
 
-                    if (nextSign > atGreat)
+                    if (nextSign > atGreat) {
                         atGreat = nextSign;
+                        nextLess = html.find(T('<'), atGreat + 1);
+                    }
 
                     state = State::Begin;
                     break;
@@ -341,7 +347,18 @@ namespace htmlparser {
                 // attribute = ...
                 valueStart = html.find_first_not_of(T(" \t\n"), nextSign + 1);
 
-                if (html[valueStart] == T('\"')) {
+                if (html[valueStart] == T('>')) {
+                    if (assist.inlineElement == true) {
+                        currentInlineElement->addAttribute(attrTmp, T(""));
+                    }
+                    else {
+                        currentElement->addAttribute(attrTmp, T(""));
+                    }
+
+                    valueEnd = attrEnd;
+                    break;
+                }
+                else if (html[valueStart] == T('\"')) {
                     valueStart++;
                     valueEnd = html.find(T('\"'), valueStart);
                 }
@@ -397,11 +414,25 @@ namespace htmlparser {
 
             case State::FinalState:
                 std::cout << "In FinalState" << std::endl;
-                break;
+                textStart = html.find_first_not_of(T(" \t\n"), lastGreat + 1);
+                textEnd = html.find_last_not_of(T(" \t\n"), atLess - 1);
+                std::cout << "textStart = " << textStart << std::endl;
+                std::cout << "textEnd = " << textEnd << std::endl;
+
+                if (textEnd >= textStart) {
+                    if (tagStack.size() == 0) {
+                        //text必须在Element内，在document内显然不合法
+                    }
+                    else {
+                        currentElement -> addSon(make_shared<HtmlText>(
+                                                     html.substr(textStart, textEnd + 1 - textStart)));
+                    }
+                }
+
+                return document;
             }
         }
 
-        return document;
     }
 
 }
