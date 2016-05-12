@@ -5,8 +5,6 @@
 namespace htmlparser {
 
     size_t TagStack::find(const string_t& tag) {
-        std::cout << "find: " << tag << std::endl;
-        //find
         size_t s = size();
 
         while (s > 0) {
@@ -20,35 +18,17 @@ namespace htmlparser {
     }
 
     void TagStack::push(const string_t& tag) {
-        std::cout << "push: " << tag << std::endl;
-        std::cout << "Origin _sz:" << _sz << std::endl;
-
         if (_sz < _stack.size())
             _stack[_sz++] = tag;
         else {
             _stack.push_back(tag);
             _sz++;
         }
-
-        std::cout << "Now _sz:" << _sz << std::endl;
-        std::cout << "Stack:" << std::endl;
-
-        for (size_t i = 0; i < _sz; ++i) {
-            std::cout << _stack[i] << std::endl;
-        }
     }
 
     size_t TagStack::pop(size_t i) {
         ASSERT(_sz >= i);
-        std::cout << "Origin _sz:" << _sz << std::endl;
         _sz -= i;
-        std::cout << "Now _sz:" << _sz << std::endl;
-        std::cout << "Stack:" << std::endl;
-
-        for (size_t i = 0; i < _sz; ++i) {
-            std::cout << _stack[i] << std::endl;
-        }
-
         return _sz;
     }
 
@@ -89,7 +69,6 @@ namespace htmlparser {
         auto _TagToken = [&](string::size_type length) {
             string_t _tag = html.substr(tkStart, length);
             transform(_tag.begin(), _tag.end(), _tag.begin(), ::tolower_t);
-            std::cout << "_tag: " << _tag << std::endl;
 
             assist.inlineElement = false;
             assist.inlineElement =
@@ -100,24 +79,20 @@ namespace htmlparser {
                 false;
 
             if (_tag == T("!doctype")) {
-                std::cout << "found doctype" << std::endl;
                 assist.foundDocType = true;
                 state = State::InDocType;
                 return;
             }
 
             if (_tag == T("html")) {
-                std::cout << "found html" << std::endl;
                 assist.foundHtml = true;
             }
 
             if (_tag == T("head")) {
-                std::cout << "found head" << std::endl;
                 assist.foundHead = true;
             }
 
             if (_tag == T("body")) {
-                std::cout << "found body" << std::endl;
                 assist.foundBody = true;
             }
 
@@ -144,7 +119,6 @@ namespace htmlparser {
                         currentElement = static_pointer_cast<HtmlElement>(currentElement->getParent());
                         //如下的转换失败，改用如上代码
                         //currentElement.reset((HtmlElement*)(currentElement->getParent().get()));
-                        std::cout << "Now currentElement: " << currentElement -> getTag() << std::endl;
                         num--;
                     }
                 }
@@ -157,7 +131,6 @@ namespace htmlparser {
         while (true) {
             switch (state) {
             case State::Begin:
-                std::cout << "in begin" << std::endl;
 
                 if (atGreat == html.size() - 1)
                     return document;
@@ -185,17 +158,11 @@ namespace htmlparser {
                 //以上确保前置条件：
                 //   lastGreat, atLess, atGreat, nextLess的相对位置关系为：
                 //     lastGreat < atLess < atGreat < nextLess(or npos)
-                std::cout << lastGreat << std::endl;
-                std::cout << atLess << std::endl;
-                std::cout << atGreat << std::endl;
-                std::cout << nextLess << std::endl;
 
                 //InText
                 if (atLess > lastGreat + 1) {
                     textStart = html.find_first_not_of(T(" \t\n"), lastGreat + 1);
                     textEnd = html.find_last_not_of(T(" \t\n"), atLess - 1);
-                    std::cout << "textStart = " << textStart << std::endl;
-                    std::cout << "textEnd = " << textEnd << std::endl;
 
                     if (textEnd >= textStart) {
                         if (tagStack.size() == 0) {
@@ -233,7 +200,6 @@ namespace htmlparser {
                 break;
 
             case State::InComment:
-                std::cout << "in comment" << std::endl;
 
                 //暂时不考虑 -- \n\t> 的情况
                 //因comment让>失效，重新设置atGreat,和nextLess
@@ -259,7 +225,6 @@ namespace htmlparser {
                 break;
 
             case State::InElement:
-                std::cout << "in element" << std::endl;
                 tagTmp = html.substr(tkStart, tkEnd - tkStart);
 
                 if (assist.inlineElement == true) {
@@ -297,7 +262,6 @@ namespace htmlparser {
                 break;
 
             case State::InAttributes:
-                std::cout << "in attribute" << std::endl;
                 attrStart = html.find_first_not_of(T(" \t\n"), valueEnd + 1);
 
                 //无属性
@@ -379,7 +343,6 @@ namespace htmlparser {
                 break;
 
             case State::InCloseTag:
-                std::cout << "in close tag" << std::endl;
                 tkStart = html.find_first_not_of(T(" \t\n/"), tkStart);
 
                 //empty close tag </>
@@ -397,7 +360,6 @@ namespace htmlparser {
                 }
 
             case State::InDocType:
-                std::cout << "In DocType" << std::endl;
                 tkStart = html.find_first_not_of(T(" \t\n"), tkEnd);
                 tkEnd = html.find_first_not_of(T(" \t\n"), atGreat - 1);
 
@@ -413,11 +375,8 @@ namespace htmlparser {
                 break;
 
             case State::FinalState:
-                std::cout << "In FinalState" << std::endl;
                 textStart = html.find_first_not_of(T(" \t\n"), lastGreat + 1);
                 textEnd = html.find_last_not_of(T(" \t\n"), atLess - 1);
-                std::cout << "textStart = " << textStart << std::endl;
-                std::cout << "textEnd = " << textEnd << std::endl;
 
                 if (textEnd >= textStart) {
                     if (tagStack.size() == 0) {
