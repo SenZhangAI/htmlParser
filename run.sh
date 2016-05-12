@@ -35,6 +35,7 @@ echo "run test..."
 ./bin/htmlparser.exe ./test/About-OperaSoftware.html
 
 echo "open index.html..."
+echo "this may take a moment..."
 
 if has_installed explorer; then
   explorer index.html

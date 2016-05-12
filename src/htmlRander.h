@@ -1,7 +1,7 @@
 #ifndef HTMLRANDER_H_
 #define HTMLRANDER_H_
 
-#include "HtmlParserSTL.h"
+#include "htmlParserSTL.h"
 #include "htmlio.h"
 
 namespace htmlparser {

@@ -1,7 +1,7 @@
 #ifndef HTMLIO_H_
 #define HTMLIO_H_
 
-#include "HtmlParserSTL.h"
+#include "htmlParserSTL.h"
 
 namespace htmlparser {
 

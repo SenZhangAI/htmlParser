@@ -1,5 +1,5 @@
 #include "htmlDOM.h"
-#include "HtmlLexer.h"
+#include "htmlLexer.h"
 
 namespace htmlparser {
 

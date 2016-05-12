@@ -1,7 +1,7 @@
 #include "htmlDOM.h"
 #include "htmlParserSTL.h"
 #include "htmlRander.h"
-#include "HtmlLexer.h"
+#include "htmlLexer.h"
 #include "htmlio.h"
 
 using namespace htmlparser;
