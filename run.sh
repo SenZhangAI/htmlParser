@@ -1,13 +1,10 @@
 #!/bin/bash
 
 has_installed() {
-  echo "Check if [$1] installed..."
   found=$(which $1 2>/dev/null)
   if [ -z "$found" ]; then
-    echo "                           ------- No"
     return 1
   else
-    echo "                           ------- Yes"
     return 0
   fi
 }
@@ -41,6 +38,8 @@ if has_installed explorer; then
   explorer index.html
 elif has_installed gnome-open; then
   gnome-open index.html
+elif has_installed open; then
+  open index.html
 elif has_installed xdg-open; then
   xdg-open index.html
 fi
